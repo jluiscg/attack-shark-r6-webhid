@@ -160,7 +160,7 @@ export class WebHIDManager {
 
   private async fetchActiveProfile() {
     await this.safeRead(Commands.readActiveProfile(), data => {
-      const p = data[7];
+      const p = data[6];
       if (p >= 1 && p <= 3) {
         this.store.update({ activeProfile: p });
       }
