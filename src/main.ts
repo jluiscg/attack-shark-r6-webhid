@@ -13,7 +13,6 @@ const batteryStatusEl = document.getElementById('battery-status')!;
 const fwVersionEl = document.getElementById('fw-version')!;
 const mainContent = document.getElementById('main-content')!;
 const loadingOverlay = document.getElementById('loading-overlay')!;
-const packetLog = document.getElementById('packet-log')!;
 const profileSelect = document.getElementById('profile-select') as HTMLSelectElement;
 
 const getP = () => manager.store.state.activeProfile || 1;
@@ -34,17 +33,8 @@ const dpiStageCountSel = document.getElementById('dpi-stage-count') as HTMLSelec
 const activeDpiStageSel = document.getElementById('active-dpi-stage') as HTMLSelectElement;
 const dpiStagesContainer = document.getElementById('dpi-stages-container')!;
 
-// ... (existing inspector code)
-manager.setPacketLogCallback((dir, data) => {
-  const line = document.createElement('div');
-  line.className = dir === 'TX' ? 'log-tx' : 'log-rx';
-  line.textContent = `[${dir}] ${formatHex(data)}`;
-  packetLog.appendChild(line);
-  packetLog.scrollTop = packetLog.scrollHeight;
-});
 
 document.getElementById('clear-log-btn')?.addEventListener('click', () => {
-  packetLog.innerHTML = '';
 });
 
 // Render DPI Stages

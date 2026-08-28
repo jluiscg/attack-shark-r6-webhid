@@ -30,3 +30,7 @@ coverage/
 
 # OS Files
 Thumbs.db
+PLAN.md
+PROTOCOL.md
+screenshots/
+r6-hid-trace.json
