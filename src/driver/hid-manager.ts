@@ -139,12 +139,17 @@ export class WebHIDManager {
   }
 
   private async fetchPerformance() {
-    await this.safeRead(Commands.readPollingRate(), p => {
-      let rate = 1000;
-      if (p[7] === 0x08) rate = 125;
-      if (p[7] === 0x04) rate = 250;
-      if (p[7] === 0x02) rate = 500;
-      this.store.update({ pollingRate: rate });
+    await this.safeRead(Commands.readPollingRate(), rate => {
+      const code = rate[7];
+      let hz = 1000;
+      if (code === 0x08) hz = 125;
+      if (code === 0x04) hz = 250;
+      if (code === 0x02) hz = 500;
+      if (code === 0x01) hz = 1000;
+      if (code === 0x20) hz = 2000;
+      if (code === 0x40) hz = 4000;
+      if (code === 0x80) hz = 8000;
+      this.store.update({ pollingRate: hz });
     });
 
     await this.safeRead(Commands.readSleepTime(), s => this.store.update({ sleepTime: (s[7] << 8) | s[8] }));
@@ -177,7 +182,9 @@ export class WebHIDManager {
   }
 
   private async fetchFirmware() {
-    // Intentionally skipped to avoid confusion with bootloader generic versions
+    // We intentionally don't update the UI with this generic bootloader version,
+    // but the MCU requires this command to fully wake up the read queue for DPI tables.
+    await this.safeRead(Commands.readFirmwareInfo(), () => {});
   }
 
   private async fetchBattery() {

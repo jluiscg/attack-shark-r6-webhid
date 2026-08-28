@@ -121,10 +121,15 @@ const q = (cmd: Uint8Array) => manager['queue'].sendCommand(cmd);
 
 pollingRateSel.addEventListener('change', (e) => {
   const val = parseInt((e.target as HTMLSelectElement).value, 10);
-  let code = 0x01;
+  let code = 0x01; // default 1000
   if (val === 125) code = 0x08;
   if (val === 250) code = 0x04;
   if (val === 500) code = 0x02;
+  if (val === 1000) code = 0x01;
+  if (val === 2000) code = 0x20;
+  if (val === 4000) code = 0x40;
+  if (val === 8000) code = 0x80;
+
   q(Commands.setPollingRate(code));
 });
 

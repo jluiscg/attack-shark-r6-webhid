@@ -5,7 +5,7 @@ export const Commands = {
   // --- READ COMMANDS (MSB Set) ---
   
   readHandshake: () => 
-    buildPacket(0x81, Array(16).fill(0), 0x02, 0x01),
+    buildPacket(0x81, Array(16).fill(0), 0x02, 0x00),
 
   readFirmwareInfo: () => 
     buildPacket(PARAM.FW_INFO | 0x80, [0x02, 0x00], 0x01, 0x00),
