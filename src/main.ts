@@ -14,7 +14,9 @@ const mainContent = document.getElementById('main-content')!;
 const packetLog = document.getElementById('packet-log')!;
 
 const pollingRateSel = document.getElementById('polling-rate') as HTMLSelectElement;
-const sleepTimeSel = document.getElementById('sleep-time') as HTMLSelectElement;
+const sleepEnable = document.getElementById('sleep-enable') as HTMLInputElement;
+const sleepSlider = document.getElementById('sleep-slider') as HTMLInputElement;
+const sleepVal = document.getElementById('sleep-val') as HTMLSpanElement;
 const debounceSlider = document.getElementById('debounce-slider') as HTMLInputElement;
 const debounceVal = document.getElementById('debounce-val')!;
 const lodRadios = document.getElementsByName('lod') as NodeListOf<HTMLInputElement>;
@@ -85,7 +87,23 @@ manager.store.subscribe((state) => {
     batteryStatusEl.classList.remove('hidden');
     
     if (pollingRateSel.value !== String(state.pollingRate)) pollingRateSel.value = String(state.pollingRate);
-    if (sleepTimeSel.value !== String(state.sleepTime)) sleepTimeSel.value = String(state.sleepTime);
+        if (state.sleepTime !== undefined) {
+      if (state.sleepTime === 0) {
+        if (sleepEnable.checked) sleepEnable.checked = false;
+        sleepSlider.disabled = true;
+        sleepVal.style.opacity = '0.5';
+      } else {
+        if (!sleepEnable.checked) sleepEnable.checked = true;
+        sleepSlider.disabled = false;
+        sleepVal.style.opacity = '1';
+        
+        const idx = String(sleepSecondsToIndex(state.sleepTime));
+        if (sleepSlider.value !== idx) {
+          sleepSlider.value = idx;
+        }
+        updateSleepDisplay(state.sleepTime);
+      }
+    }
     if (debounceSlider.value !== String(state.debounceTime)) {
       debounceSlider.value = String(state.debounceTime);
       debounceVal.textContent = String(state.debounceTime);
@@ -133,8 +151,33 @@ pollingRateSel.addEventListener('change', (e) => {
   q(Commands.setPollingRate(code));
 });
 
-sleepTimeSel.addEventListener('change', (e) => {
-  q(Commands.setSleepTime(parseInt((e.target as HTMLSelectElement).value, 10)));
+function sleepIndexToSeconds(idx: number): number {
+  return idx === 0 ? 15 : idx * 60;
+}
+function sleepSecondsToIndex(sec: number): number {
+  return sec <= 15 ? 0 : Math.round(sec / 60);
+}
+function updateSleepDisplay(sec: number) {
+  sleepVal.textContent = sec === 15 ? '15s' : `${sec / 60} min`;
+}
+
+sleepEnable.addEventListener('change', () => {
+  const enabled = sleepEnable.checked;
+  sleepSlider.disabled = !enabled;
+  sleepVal.style.opacity = enabled ? '1' : '0.5';
+  const seconds = enabled ? sleepIndexToSeconds(parseInt(sleepSlider.value, 10)) : 0;
+  q(Commands.setSleepTime(seconds));
+  manager.store.update({ sleepTime: seconds });
+});
+
+sleepSlider.addEventListener('input', () => {
+  updateSleepDisplay(sleepIndexToSeconds(parseInt(sleepSlider.value, 10)));
+});
+
+sleepSlider.addEventListener('change', () => {
+  const seconds = sleepIndexToSeconds(parseInt(sleepSlider.value, 10));
+  q(Commands.setSleepTime(seconds));
+  manager.store.update({ sleepTime: seconds });
 });
 
 debounceSlider.addEventListener('input', (e) => {

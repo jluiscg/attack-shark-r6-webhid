@@ -39,21 +39,22 @@
             </div>
             
             <div class="setting-group">
-              <label>Sleep Time</label>
-              <select id="sleep-time">
-                <option value="15">15s</option>
-                <option value="60">1 min</option>
-                <option value="120">2 min</option>
-                <option value="180">3 min</option>
-                <option value="300">5 min</option>
-                <option value="600">10 min</option>
-                <option value="1800">30 min</option>
-              </select>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label>Sleep Time</label>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="sleep-enable">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div id="sleep-slider-container" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                <input type="range" id="sleep-slider" min="0" max="30" value="3" style="flex: 1; padding: 0;">
+                <span id="sleep-val" style="min-width: 50px; text-align: right; font-size: 0.9em; color: var(--text-secondary);">3 min</span>
+              </div>
             </div>
 
             <div class="setting-group">
               <label>Debounce Time: <span id="debounce-val">3</span>ms</label>
-              <input type="range" id="debounce-slider" min="0" max="15" value="3">
+              <input type="range" id="debounce-slider" min="0" max="15" value="3" style="padding: 0;">
             </div>
 
             <div class="setting-group">
@@ -64,24 +65,37 @@
                 <label><input type="radio" name="lod" value="2"> 2.0mm</label>
               </div>
             </div>
+          </div>
 
-            <hr>
-            
+          <div class="panel">
+            <h3 style="margin-top: 0;">Toggles</h3>
             <div class="setting-group toggle">
               <label>Angle Snap</label>
-              <input type="checkbox" id="angle-snap">
+              <label class="toggle-switch">
+                <input type="checkbox" id="angle-snap">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
             <div class="setting-group toggle">
               <label>Ripple Control</label>
-              <input type="checkbox" id="ripple-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="ripple-control">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
             <div class="setting-group toggle">
               <label>Motion Sync</label>
-              <input type="checkbox" id="motion-sync">
+              <label class="toggle-switch">
+                <input type="checkbox" id="motion-sync">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
             <div class="setting-group toggle">
               <label>Competitive Mode</label>
-              <input type="checkbox" id="competitive-mode">
+              <label class="toggle-switch">
+                <input type="checkbox" id="competitive-mode">
+                <span class="toggle-slider"></span>
+              </label>
             </div>
           </div>
 
