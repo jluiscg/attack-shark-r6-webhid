@@ -14,6 +14,9 @@ const fwVersionEl = document.getElementById('fw-version')!;
 const mainContent = document.getElementById('main-content')!;
 const loadingOverlay = document.getElementById('loading-overlay')!;
 const packetLog = document.getElementById('packet-log')!;
+const profileSelect = document.getElementById('profile-select') as HTMLSelectElement;
+
+const getP = () => manager.store.state.activeProfile || 1;
 
 const pollingRateSel = document.getElementById('polling-rate') as HTMLSelectElement;
 const sleepEnable = document.getElementById('sleep-enable') as HTMLInputElement;
@@ -59,7 +62,7 @@ function renderDPIStages(state: any) {
     
     row.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).tagName !== 'INPUT' && state.activeDpiStage !== (i + 1)) {
-        manager['queue'].sendCommand(Commands.setActiveDPIStage(i + 1));
+        manager['queue'].sendCommand(Commands.setActiveDPIStage(i + 1, getP()));
         manager.store.update({ activeDpiStage: i + 1 });
       }
     });
@@ -70,7 +73,7 @@ function renderDPIStages(state: any) {
       const newStages = [...state.dpiStages];
       newStages[i] = { x: val, y: val };
       manager.store.update({ dpiStages: newStages });
-      manager['queue'].sendCommand(Commands.setDPITable(state.dpiStageCount, newStages));
+      manager['queue'].sendCommand(Commands.setDPITable(state.dpiStageCount, newStages, getP()));
     });
     
     dpiStagesContainer.appendChild(row);
@@ -82,6 +85,10 @@ manager.store.subscribe((state) => {
     connectBtn.classList.add('hidden');
     disconnectBtn.classList.remove('hidden');
     resetBtn.classList.remove('hidden');
+    profileSelect.classList.remove('hidden');
+    if (state.activeProfile !== undefined && profileSelect.value !== String(state.activeProfile)) {
+      profileSelect.value = String(state.activeProfile);
+    }
     
     if (state.isLoading) {
       loadingOverlay.classList.remove('hidden');
@@ -135,6 +142,7 @@ manager.store.subscribe((state) => {
     connectBtn.classList.remove('hidden');
     disconnectBtn.classList.add('hidden');
     resetBtn.classList.add('hidden');
+    profileSelect.classList.add('hidden');
     loadingOverlay.classList.add('hidden');
     mainContent.classList.add('hidden');
     deviceNameEl.textContent = 'Disconnected';
@@ -159,7 +167,7 @@ pollingRateSel.addEventListener('change', (e) => {
   if (val === 4000) code = 0x40;
   if (val === 8000) code = 0x80;
 
-  q(Commands.setPollingRate(code));
+  q(Commands.setPollingRate(code, getP()));
 });
 
 function sleepIndexToSeconds(idx: number): number {
@@ -177,7 +185,7 @@ sleepEnable.addEventListener('change', () => {
   sleepSlider.disabled = !enabled;
   sleepVal.style.opacity = enabled ? '1' : '0.5';
   const seconds = enabled ? sleepIndexToSeconds(parseInt(sleepSlider.value, 10)) : 65535;
-  q(Commands.setSleepTime(seconds));
+  q(Commands.setSleepTime(seconds, getP()));
   manager.store.update({ sleepTime: seconds });
 });
 
@@ -187,7 +195,7 @@ sleepSlider.addEventListener('input', () => {
 
 sleepSlider.addEventListener('change', () => {
   const seconds = sleepIndexToSeconds(parseInt(sleepSlider.value, 10));
-  q(Commands.setSleepTime(seconds));
+  q(Commands.setSleepTime(seconds, getP()));
   manager.store.update({ sleepTime: seconds });
 });
 
@@ -195,57 +203,57 @@ debounceSlider.addEventListener('input', (e) => {
   debounceVal.textContent = (e.target as HTMLInputElement).value;
 });
 debounceSlider.addEventListener('change', (e) => {
-  q(Commands.setDebounce(parseInt((e.target as HTMLInputElement).value, 10)));
+  q(Commands.setDebounce(parseInt((e.target as HTMLInputElement).value, 10), getP()));
 });
 
 lodRadios.forEach(r => r.addEventListener('change', (e) => {
-  q(Commands.setLOD(parseInt((e.target as HTMLInputElement).value, 10)));
+  q(Commands.setLOD(parseInt((e.target as HTMLInputElement).value, 10), getP()));
 }));
 
-angleSnap.addEventListener('change', (e) => q(Commands.setAngleSnap((e.target as HTMLInputElement).checked)));
-rippleControl.addEventListener('change', (e) => q(Commands.setRippleControl((e.target as HTMLInputElement).checked)));
-motionSync.addEventListener('change', (e) => q(Commands.setMotionSync((e.target as HTMLInputElement).checked)));
-competitiveMode.addEventListener('change', (e) => q(Commands.setCompetitive((e.target as HTMLInputElement).checked)));
+angleSnap.addEventListener('change', (e) => q(Commands.setAngleSnap((e.target as HTMLInputElement).checked, getP())));
+rippleControl.addEventListener('change', (e) => q(Commands.setRippleControl((e.target as HTMLInputElement).checked, getP())));
+motionSync.addEventListener('change', (e) => q(Commands.setMotionSync((e.target as HTMLInputElement).checked, getP())));
+competitiveMode.addEventListener('change', (e) => q(Commands.setCompetitive((e.target as HTMLInputElement).checked, getP())));
 
 activeDpiStageSel.addEventListener('change', (e) => {
   const stage = parseInt((e.target as HTMLSelectElement).value, 10);
-  q(Commands.setActiveDPIStage(stage));
+  q(Commands.setActiveDPIStage(stage, getP()));
   manager.store.update({ activeDpiStage: stage });
 });
 
 dpiStageCountSel.addEventListener('change', (e) => {
   const count = parseInt((e.target as HTMLSelectElement).value, 10);
   manager.store.update({ dpiStageCount: count });
-  q(Commands.setDPITable(count, manager.store.state.dpiStages));
+  q(Commands.setDPITable(count, manager.store.state.dpiStages, getP()));
 });
 
 resetBtn.addEventListener('click', () => {
   if (!confirm("Are you sure you want to reset all settings to defaults?")) return;
   
   // Polling Rate (1000hz -> 0x01)
-  q(Commands.setPollingRate(0x01));
+  q(Commands.setPollingRate(0x01, getP()));
   manager.store.update({ pollingRate: 1000 });
   
   // Sleep Time (15s)
-  q(Commands.setSleepTime(15));
+  q(Commands.setSleepTime(15, getP()));
   manager.store.update({ sleepTime: 15 });
   
   // Debounce (5ms)
-  q(Commands.setDebounce(5));
+  q(Commands.setDebounce(5, getP()));
   manager.store.update({ debounceTime: 5 });
   
   // LOD (1mm -> index 1)
-  q(Commands.setLOD(1));
+  q(Commands.setLOD(1, getP()));
   manager.store.update({ lodIndex: 1 });
   
   // Toggles (OFF)
-  q(Commands.setAngleSnap(false));
+  q(Commands.setAngleSnap(false, getP()));
   manager.store.update({ angleSnap: false });
-  q(Commands.setRippleControl(false));
+  q(Commands.setRippleControl(false, getP()));
   manager.store.update({ rippleControl: false });
-  q(Commands.setMotionSync(false));
+  q(Commands.setMotionSync(false, getP()));
   manager.store.update({ motionSync: false });
-  q(Commands.setCompetitive(false));
+  q(Commands.setCompetitive(false, getP()));
   manager.store.update({ competitiveMode: false });
   
   // DPI Stages
@@ -257,9 +265,14 @@ resetBtn.addEventListener('click', () => {
     {x: 8000, y: 8000},
     {x: 42000, y: 42000}
   ];
-  q(Commands.setDPITable(6, defaultStages));
+  q(Commands.setDPITable(6, defaultStages, getP()));
   manager.store.update({ dpiStageCount: 6, dpiStages: defaultStages });
   
-  q(Commands.setActiveDPIStage(2));
+  q(Commands.setActiveDPIStage(2, getP()));
   manager.store.update({ activeDpiStage: 2 });
+});
+
+profileSelect.addEventListener('change', (e) => {
+  const profileId = parseInt((e.target as HTMLSelectElement).value, 10);
+  manager.changeProfile(profileId);
 });

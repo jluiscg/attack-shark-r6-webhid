@@ -1,4 +1,6 @@
 export type DeviceState = {
+  isLoading?: boolean;
+  activeProfile?: number;
   connected: boolean;
   isWireless: boolean;
   deviceName: string;

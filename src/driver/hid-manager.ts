@@ -79,6 +79,7 @@ export class WebHIDManager {
       this.store.update({
         connected: true,
         isLoading: true,
+        activeProfile: 1,
         deviceName: isWireless ? 'Attack Shark R6 (2.4G)' : 'Attack Shark R6 (Wired)',
         isWireless
       });
@@ -132,6 +133,12 @@ export class WebHIDManager {
     }
   }
 
+  public async changeProfile(profileId: number) {
+    if (!this.device) return;
+    this.store.update({ activeProfile: profileId });
+    await this.syncState();
+  }
+
   private async syncState() {
     this.store.update({ isLoading: true });
     try {
@@ -145,7 +152,7 @@ export class WebHIDManager {
   }
 
   private async fetchPerformance() {
-    await this.safeRead(Commands.readPollingRate(), rate => {
+    await this.safeRead(Commands.readPollingRate(this.store.state.activeProfile || 1), rate => {
       const code = rate[7];
       let hz = 1000;
       if (code === 0x08) hz = 125;
@@ -158,21 +165,21 @@ export class WebHIDManager {
       this.store.update({ pollingRate: hz });
     });
 
-    await this.safeRead(Commands.readSleepTime(), s => this.store.update({ sleepTime: (s[7] << 8) | s[8] }));
-    await this.safeRead(Commands.readDebounce(), d => this.store.update({ debounceTime: d[7] }));
-    await this.safeRead(Commands.readLOD(), l => this.store.update({ lodIndex: l[7] === 0x87 ? 0 : l[7] }));
-    await this.safeRead(Commands.readAngleSnap(), a => this.store.update({ angleSnap: a[7] === 0x01 }));
-    await this.safeRead(Commands.readRippleControl(), r => this.store.update({ rippleControl: r[7] === 0x01 }));
-    await this.safeRead(Commands.readMotionSync(), m => this.store.update({ motionSync: m[7] === 0x01 }));
-    await this.safeRead(Commands.readCompetitive(), c => this.store.update({ competitiveMode: c[7] === 0x01 }));
+    await this.safeRead(Commands.readSleepTime(this.store.state.activeProfile || 1), s => this.store.update({ sleepTime: (s[7] << 8) | s[8] }));
+    await this.safeRead(Commands.readDebounce(this.store.state.activeProfile || 1), d => this.store.update({ debounceTime: d[7] }));
+    await this.safeRead(Commands.readLOD(this.store.state.activeProfile || 1), l => this.store.update({ lodIndex: l[7] === 0x87 ? 0 : l[7] }));
+    await this.safeRead(Commands.readAngleSnap(this.store.state.activeProfile || 1), a => this.store.update({ angleSnap: a[7] === 0x01 }));
+    await this.safeRead(Commands.readRippleControl(this.store.state.activeProfile || 1), r => this.store.update({ rippleControl: r[7] === 0x01 }));
+    await this.safeRead(Commands.readMotionSync(this.store.state.activeProfile || 1), m => this.store.update({ motionSync: m[7] === 0x01 }));
+    await this.safeRead(Commands.readCompetitive(this.store.state.activeProfile || 1), c => this.store.update({ competitiveMode: c[7] === 0x01 }));
   }
 
   private async fetchDPI() {
-    await this.safeRead(Commands.readActiveDPI(), active => {
+    await this.safeRead(Commands.readActiveDPI(this.store.state.activeProfile || 1), active => {
       this.store.update({ activeDpiStage: active[7] });
     });
 
-    await this.safeRead(Commands.readDPITable(), table => {
+    await this.safeRead(Commands.readDPITable(this.store.state.activeProfile || 1), table => {
       const count = table[7];
       const stages = [];
       for (let i = 0; i < 6; i++) {
