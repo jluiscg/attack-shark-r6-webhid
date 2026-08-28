@@ -1,6 +1,8 @@
 # Attack Shark R6 WebHID Configurator
 
-A driverless, cross-platform WebHID configurator for the Attack Shark R6 wireless mouse. This project allows you to fully configure your mouse directly from your browser without needing the official Windows driver.
+> **Note:** I've vibecoded the s#1t out of this, so, yeah keep that in mind. Just wanted to be able to configure my mouse on Linux.
+
+A driverless, cross-platform WebHID configurator for the Attack Shark R6 wireless mouse. This project allows you to fully configure your mouse directly from your browser without needing the official Windows app or the official "webdriver" (which does not work on wireless for whatever reason).
 
 ## Features
 - **Driverless Web Interface:** No installation required, works directly via Chrome/Edge WebHID.
@@ -53,6 +55,3 @@ On Linux, browsers do not have permission to access HID devices by default. You 
 - `src/driver/hid-manager.ts`: Core WebHID connection manager and state store.
 - `src/driver/transaction-queue.ts`: Handles the complex polling required for read/write handshakes over 2.4G.
 - `src/protocol/commands.ts`: The byte-level payload builders mapping to the R6 protocol.
-
-## Protocol & Reverse Engineering
-The mouse uses a generic Telink/BYK901 protocol heavily modified with strict endpoint routing via a "subDevice" architecture. For a deep dive into the packet structure, please see [PROTOCOL.md](./PROTOCOL.md).
