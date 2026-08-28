@@ -78,6 +78,7 @@ export class WebHIDManager {
       const isWireless = targetDevice.productId === PID.WIRELESS_24G;
       this.store.update({
         connected: true,
+        isLoading: true,
         deviceName: isWireless ? 'Attack Shark R6 (2.4G)' : 'Attack Shark R6 (Wired)',
         isWireless
       });
