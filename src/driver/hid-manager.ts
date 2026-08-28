@@ -137,7 +137,7 @@ export class WebHIDManager {
     if (!this.device) return;
     try {
       // Send the hardware switch command
-      await this.safeWrite(Commands.setActiveProfile(profileId));
+      await this.queue.sendCommand(Commands.setActiveProfile(profileId));
     } catch(e) {
       console.warn("Failed to set active hardware profile", e);
     }
@@ -200,7 +200,6 @@ export class WebHIDManager {
       const stages = [];
       for (let i = 0; i < 6; i++) {
         // We will just log the table here for now so the user can show us what it returns
-        console.log(`DPI Table RX bytes:`, Array.from(table).map(b => b.toString(16).padStart(2, '0')).join(' '));
         const offset = 8 + (i * 4);
         const x = (table[offset] << 8) | table[offset+1];
         const y = (table[offset+2] << 8) | table[offset+3];
