@@ -14,6 +14,11 @@
           <span id="device-name">Disconnected</span>
         </div>
         <div class="right">
+          <select id="profile-select" class="hidden" style="margin-right: 12px; padding: 4px 8px; background: var(--bg-elevated); color: white; border: 1px solid #3a3a4a; border-radius: 4px; font-weight: bold;">
+            <option value="1">PROFILE 1</option>
+            <option value="2">PROFILE 2</option>
+            <option value="3">PROFILE 3</option>
+          </select>
           <span id="battery-status" class="badge hidden">🔋 100%</span>
           <span id="fw-version" class="badge hidden">FW: -</span>
           <button id="disconnect-btn" class="btn hidden">Disconnect</button>
@@ -153,13 +158,7 @@
           </div>
         </div>
         
-        <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px;">
-          <select id="profile-select" class="hidden" style="margin-right: 12px; padding: 6px; background: var(--bg-elevated); color: white; border: 1px solid #3a3a4a; border-radius: 4px; font-weight: bold;">
-            <option value="1">PROFILE 1</option>
-            <option value="2">PROFILE 2</option>
-            <option value="3">PROFILE 3</option>
-            <option value="4">PROFILE 4</option>
-          </select>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
           <button id="reset-btn" class="btn hidden" style="color: var(--danger); border: 1px solid var(--danger); background: transparent;">Reset Defaults</button></div>
         <div class="panel inspector">
           <h3>Packet Inspector <button id="clear-log-btn" class="btn" style="float:right; padding:2px 8px; font-size:12px;">Clear</button></h3>
