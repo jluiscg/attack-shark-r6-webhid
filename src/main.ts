@@ -7,6 +7,7 @@ const manager = new WebHIDManager();
 
 const connectBtn = document.getElementById('connect-btn')!;
 const disconnectBtn = document.getElementById('disconnect-btn')!;
+const resetBtn = document.getElementById('reset-btn')!;
 const deviceNameEl = document.getElementById('device-name')!;
 const batteryStatusEl = document.getElementById('battery-status')!;
 const fwVersionEl = document.getElementById('fw-version')!;
@@ -80,6 +81,7 @@ manager.store.subscribe((state) => {
     // ... connect code ...
     connectBtn.classList.add('hidden');
     disconnectBtn.classList.remove('hidden');
+    resetBtn.classList.remove('hidden');
     mainContent.classList.remove('hidden');
     
     deviceNameEl.textContent = state.deviceName;
@@ -125,6 +127,7 @@ manager.store.subscribe((state) => {
   } else {
     connectBtn.classList.remove('hidden');
     disconnectBtn.classList.add('hidden');
+    resetBtn.classList.add('hidden');
     mainContent.classList.add('hidden');
     deviceNameEl.textContent = 'Disconnected';
     batteryStatusEl.classList.add('hidden');
@@ -206,4 +209,49 @@ dpiStageCountSel.addEventListener('change', (e) => {
   const count = parseInt((e.target as HTMLSelectElement).value, 10);
   manager.store.update({ dpiStageCount: count });
   q(Commands.setDPITable(count, manager.store.state.dpiStages));
+});
+
+resetBtn.addEventListener('click', () => {
+  if (!confirm("Are you sure you want to reset all settings to defaults?")) return;
+  
+  // Polling Rate (1000hz -> 0x01)
+  q(Commands.setPollingRate(0x01));
+  manager.store.update({ pollingRate: 1000 });
+  
+  // Sleep Time (15s)
+  q(Commands.setSleepTime(15));
+  manager.store.update({ sleepTime: 15 });
+  
+  // Debounce (5ms)
+  q(Commands.setDebounce(5));
+  manager.store.update({ debounceTime: 5 });
+  
+  // LOD (1mm -> index 1)
+  q(Commands.setLOD(1));
+  manager.store.update({ lodIndex: 1 });
+  
+  // Toggles (OFF)
+  q(Commands.setAngleSnap(false));
+  manager.store.update({ angleSnap: false });
+  q(Commands.setRippleControl(false));
+  manager.store.update({ rippleControl: false });
+  q(Commands.setMotionSync(false));
+  manager.store.update({ motionSync: false });
+  q(Commands.setCompetitive(false));
+  manager.store.update({ competitiveMode: false });
+  
+  // DPI Stages
+  const defaultStages = [
+    {x: 1200, y: 1200},
+    {x: 2400, y: 2400},
+    {x: 3200, y: 3200},
+    {x: 5600, y: 5600},
+    {x: 8000, y: 8000},
+    {x: 42000, y: 42000}
+  ];
+  q(Commands.setDPITable(6, defaultStages));
+  manager.store.update({ dpiStageCount: 6, dpiStages: defaultStages });
+  
+  q(Commands.setActiveDPIStage(2));
+  manager.store.update({ activeDpiStage: 2 });
 });

@@ -16,6 +16,7 @@
         <div class="right">
           <span id="battery-status" class="badge hidden">🔋 100%</span>
           <span id="fw-version" class="badge hidden">FW: -</span>
+          <button id="reset-btn" class="btn hidden" style="color: var(--danger);">Reset Defaults</button>
           <button id="disconnect-btn" class="btn hidden">Disconnect</button>
         </div>
       </header>
@@ -54,11 +55,13 @@
 
             <div class="setting-group">
               <label>Debounce Time: <span id="debounce-val">3</span>ms</label>
+              <div class="setting-desc">Delay to prevent accidental double-clicks. Lower is faster but risks double-clicking.</div>
               <input type="range" id="debounce-slider" min="0" max="15" value="3" style="padding: 0;">
             </div>
 
             <div class="setting-group">
               <label>Lift Off Distance (LOD)</label>
+              <div class="setting-desc">Height at which the sensor stops tracking when lifted.</div>
               <div class="radio-group" id="lod-radios">
                 <label><input type="radio" name="lod" value="0"> 0.7mm</label>
                 <label><input type="radio" name="lod" value="1"> 1.0mm</label>
@@ -68,28 +71,40 @@
             <hr>
             <h3 style="margin-top: 0;">Toggles</h3>
             <div class="setting-group toggle">
-              <label>Angle Snap</label>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label>Angle Snap</label>
+                <div class="setting-desc" style="margin-top:0;">Predicts and straightens out mouse movements.</div>
+              </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="angle-snap">
                 <span class="toggle-slider"></span>
               </label>
             </div>
             <div class="setting-group toggle">
-              <label>Ripple Control</label>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label>Ripple Control</label>
+                <div class="setting-desc" style="margin-top:0;">Smooths out sensor jitter at higher DPIs.</div>
+              </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="ripple-control">
                 <span class="toggle-slider"></span>
               </label>
             </div>
             <div class="setting-group toggle">
-              <label>Motion Sync</label>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label>Motion Sync</label>
+                <div class="setting-desc" style="margin-top:0;">Synchronizes sensor polling with USB polling for smoother tracking.</div>
+              </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="motion-sync">
                 <span class="toggle-slider"></span>
               </label>
             </div>
             <div class="setting-group toggle">
-              <label>Competitive Mode</label>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                <label>Competitive Mode</label>
+                <div class="setting-desc" style="margin-top:0;">Optimizes sensor power delivery for maximum responsiveness at the cost of battery.</div>
+              </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="competitive-mode">
                 <span class="toggle-slider"></span>
@@ -114,6 +129,7 @@
               </div>
               <div class="setting-group">
                 <label>Active Stage</label>
+                <div class="setting-desc">Currently active DPI stage.</div>
                 <select id="active-dpi-stage">
                   <option value="1">Stage 1</option>
                   <option value="2">Stage 2</option>

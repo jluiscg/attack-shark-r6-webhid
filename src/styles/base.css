@@ -206,3 +206,10 @@ input:checked + .toggle-slider:before {
   transform: translateX(20px);
   background-color: #fff;
 }
+
+.setting-desc {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  margin-top: -4px;
+  line-height: 1.3;
+}
