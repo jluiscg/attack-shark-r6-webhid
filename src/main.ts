@@ -134,7 +134,18 @@ manager.store.subscribe((state) => {
     if (competitiveMode.checked !== state.competitiveMode) competitiveMode.checked = state.competitiveMode;
     
     if (dpiStageCountSel.value !== String(state.dpiStageCount)) dpiStageCountSel.value = String(state.dpiStageCount);
-    if (activeDpiStageSel.value !== String(state.activeDpiStage)) activeDpiStageSel.value = String(state.activeDpiStage);
+    if (state.dpiStageCount !== undefined && activeDpiStageSel.options.length !== state.dpiStageCount) {
+      activeDpiStageSel.innerHTML = '';
+      for (let i = 1; i <= state.dpiStageCount; i++) {
+        const opt = document.createElement('option');
+        opt.value = String(i);
+        opt.textContent = `Stage ${i}`;
+        activeDpiStageSel.appendChild(opt);
+      }
+    }
+    if (state.activeDpiStage !== undefined && activeDpiStageSel.value !== String(state.activeDpiStage)) {
+      activeDpiStageSel.value = String(state.activeDpiStage);
+    }
     
     renderDPIStages(state);
     
@@ -223,8 +234,26 @@ activeDpiStageSel.addEventListener('change', (e) => {
 
 dpiStageCountSel.addEventListener('change', (e) => {
   const count = parseInt((e.target as HTMLSelectElement).value, 10);
-  manager.store.update({ dpiStageCount: count });
-  q(Commands.setDPITable(count, manager.store.state.dpiStages, getP()));
+  const currentStages = [...(manager.store.state.dpiStages || [])];
+  const defaults = [1200, 2400, 3200, 5600, 8000, 42000];
+  
+  // Fill in zeroed or missing stages with defaults
+  for (let i = 0; i < count; i++) {
+    if (!currentStages[i] || currentStages[i].x === 0 || currentStages[i].y === 0) {
+      currentStages[i] = { x: defaults[i], y: defaults[i] };
+    }
+  }
+  
+  manager.store.update({ dpiStageCount: count, dpiStages: currentStages });
+  q(Commands.setDPITable(count, currentStages, getP()));
+  
+  // Clamp active stage if it exceeds new count
+  let activeStage = manager.store.state.activeDpiStage || 1;
+  if (activeStage > count) {
+    activeStage = count;
+    manager.store.update({ activeDpiStage: activeStage });
+    q(Commands.setActiveDPIStage(activeStage, getP()));
+  }
 });
 
 resetBtn.addEventListener('click', () => {
