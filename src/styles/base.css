@@ -50,7 +50,7 @@ header .left, header .right {
 }
 
 .btn {
-  background: var(--bg-elevated);
+  background-color: var(--bg-elevated);
   color: var(--text-primary);
   border: none;
   padding: 8px 16px;
@@ -67,7 +67,7 @@ header .left, header .right {
 }
 
 .badge {
-  background: var(--bg-elevated);
+  background-color: var(--bg-elevated);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.9em;
@@ -113,7 +113,7 @@ header .left, header .right {
 .setting-group select, .setting-group input[type="range"] {
   width: 100%;
   padding: 8px;
-  background: var(--bg-elevated);
+  background-color: var(--bg-elevated);
   color: var(--text-primary);
   border: 1px solid #3a3a4a;
   border-radius: 4px;
@@ -141,7 +141,7 @@ header .left, header .right {
 hr {
   border: 0;
   height: 1px;
-  background: var(--bg-elevated);
+  background-color: var(--bg-elevated);
   margin: 20px 0;
 }
 
@@ -160,7 +160,7 @@ hr {
 .dpi-stage-row input[type="number"] {
   width: 80px;
   padding: 4px;
-  background: var(--bg-elevated);
+  background-color: var(--bg-elevated);
   color: white;
   border: 1px solid #3a3a4a;
   border-radius: 4px;
@@ -234,5 +234,11 @@ input:checked + .toggle-slider:before {
 }
 
 select {
-  padding-right: 32px !important;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8a8b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px !important;
 }
