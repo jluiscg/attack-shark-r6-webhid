@@ -190,8 +190,8 @@ export class WebHIDManager {
   private async fetchBattery() {
     await this.safeRead(Commands.readBattery(), data => {
       this.store.update({
-        isCharging: data[6] === 1,
-        batteryLevel: data[8]
+        isCharging: false,
+        batteryLevel: data[7]
       });
     });
   }
