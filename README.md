@@ -12,7 +12,7 @@ A driverless, cross-platform WebHID configurator for the Attack Shark R6 wireles
 - **Performance Settings:** Configure Polling Rate, Lift-Off Distance (LOD), Debounce Time, and Sleep Time.
 - **DPI Management:** Full read/write access to the 6-stage DPI table, with intelligent stage count clamping and defaults.
 - **Toggles:** Toggle Angle Snapping, Ripple Control, Motion Sync, and Competitive Mode.
-- **Live Battery:** Real-time battery percentage polling.
+- **Live Battery:** Real-time battery percentage polling (not really tested so it migh not work and just seems to work).
 
 ## Getting Started
 
