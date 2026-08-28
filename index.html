@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R6 WebDriver</title>
+    <link rel="stylesheet" href="/src/styles/base.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header id="connection-bar" class="panel">
+        <div class="left">
+          <button id="connect-btn" class="btn primary">Connect Mouse</button>
+          <span id="device-name">Disconnected</span>
+        </div>
+        <div class="right">
+          <span id="battery-status" class="badge hidden">🔋 100%</span>
+          <span id="fw-version" class="badge hidden">FW: -</span>
+          <button id="disconnect-btn" class="btn hidden">Disconnect</button>
+        </div>
+      </header>
+
+      <main id="main-content" class="hidden">
+        <div class="grid">
+          <!-- Performance Panel -->
+          <div class="panel">
+            <h3>Performance</h3>
+            <div class="setting-group">
+              <label>Polling Rate (Hz)</label>
+              <select id="polling-rate">
+                <option value="125">125</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="2000">2000 (Wireless)</option>
+                <option value="4000">4000 (Wireless)</option>
+                <option value="8000">8000 (Wireless)</option>
+              </select>
+            </div>
+            
+            <div class="setting-group">
+              <label>Sleep Time</label>
+              <select id="sleep-time">
+                <option value="15">15s</option>
+                <option value="60">1 min</option>
+                <option value="120">2 min</option>
+                <option value="180">3 min</option>
+                <option value="300">5 min</option>
+                <option value="600">10 min</option>
+                <option value="1800">30 min</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label>Debounce Time: <span id="debounce-val">3</span>ms</label>
+              <input type="range" id="debounce-slider" min="0" max="15" value="3">
+            </div>
+
+            <div class="setting-group">
+              <label>Lift Off Distance (LOD)</label>
+              <div class="radio-group" id="lod-radios">
+                <label><input type="radio" name="lod" value="0"> 0.7mm</label>
+                <label><input type="radio" name="lod" value="1"> 1.0mm</label>
+                <label><input type="radio" name="lod" value="2"> 2.0mm</label>
+              </div>
+            </div>
+
+            <hr>
+            
+            <div class="setting-group toggle">
+              <label>Angle Snap</label>
+              <input type="checkbox" id="angle-snap">
+            </div>
+            <div class="setting-group toggle">
+              <label>Ripple Control</label>
+              <input type="checkbox" id="ripple-control">
+            </div>
+            <div class="setting-group toggle">
+              <label>Motion Sync</label>
+              <input type="checkbox" id="motion-sync">
+            </div>
+            <div class="setting-group toggle">
+              <label>Competitive Mode</label>
+              <input type="checkbox" id="competitive-mode">
+            </div>
+          </div>
+
+          <!-- DPI Panel -->
+          <div class="panel">
+            <h3>DPI Settings</h3>
+            <div class="grid" style="margin-bottom: 0;">
+              <div class="setting-group">
+                <label>DPI Stages Count</label>
+                <select id="dpi-stage-count">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+              <div class="setting-group">
+                <label>Active Stage</label>
+                <select id="active-dpi-stage">
+                  <option value="1">Stage 1</option>
+                  <option value="2">Stage 2</option>
+                  <option value="3">Stage 3</option>
+                  <option value="4">Stage 4</option>
+                  <option value="5">Stage 5</option>
+                  <option value="6">Stage 6</option>
+                </select>
+              </div>
+            </div>
+            <div id="dpi-stages-container">
+              <!-- JS will populate the 6 sliders here -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="panel inspector">
+          <h3>Packet Inspector <button id="clear-log-btn" class="btn" style="float:right; padding:2px 8px; font-size:12px;">Clear</button></h3>
+          <div id="packet-log" class="log-container"></div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
