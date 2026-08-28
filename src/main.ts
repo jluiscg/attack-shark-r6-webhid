@@ -12,6 +12,7 @@ const deviceNameEl = document.getElementById('device-name')!;
 const batteryStatusEl = document.getElementById('battery-status')!;
 const fwVersionEl = document.getElementById('fw-version')!;
 const mainContent = document.getElementById('main-content')!;
+const loadingOverlay = document.getElementById('loading-overlay')!;
 const packetLog = document.getElementById('packet-log')!;
 
 const pollingRateSel = document.getElementById('polling-rate') as HTMLSelectElement;
@@ -78,11 +79,17 @@ function renderDPIStages(state: any) {
 
 manager.store.subscribe((state) => {
   if (state.connected) {
-    // ... connect code ...
     connectBtn.classList.add('hidden');
     disconnectBtn.classList.remove('hidden');
     resetBtn.classList.remove('hidden');
-    mainContent.classList.remove('hidden');
+    
+    if (state.isLoading) {
+      loadingOverlay.classList.remove('hidden');
+      mainContent.classList.add('hidden');
+    } else {
+      loadingOverlay.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    }
     
     deviceNameEl.textContent = state.deviceName;
     batteryStatusEl.textContent = `🔋 ${state.batteryLevel}%`;
@@ -128,6 +135,7 @@ manager.store.subscribe((state) => {
     connectBtn.classList.remove('hidden');
     disconnectBtn.classList.add('hidden');
     resetBtn.classList.add('hidden');
+    loadingOverlay.classList.add('hidden');
     mainContent.classList.add('hidden');
     deviceNameEl.textContent = 'Disconnected';
     batteryStatusEl.classList.add('hidden');

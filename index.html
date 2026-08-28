@@ -20,7 +20,12 @@
         </div>
       </header>
 
-      <main id="main-content" class="hidden">
+      <div id="loading-overlay" class="hidden" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 0; grid-column: 1 / -1; height: 400px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--bg-elevated);">
+      <div class="spinner"></div>
+      <h3 style="margin-top: 20px;">Synchronizing with Mouse...</h3>
+      <p style="color: var(--text-secondary);">Reading onboard memory</p>
+    </div>
+    <main id="main-content" class="hidden">
         <div class="grid">
           <!-- Performance Panel -->
           <div class="panel">
@@ -104,7 +109,7 @@
             <div class="setting-group toggle">
               <div style="display:flex; flex-direction:column; gap:4px;">
                 <label>Hunting Shark Competitive Mode</label>
-                <div class="setting-desc" style="margin-top:0;">When turned on, the sensor's maximum performance will be brought into play, reducing latency and making the mouse track more precise, but it consumes more power.</div>
+                <div class="setting-desc" style="margin-top:0;">When turned on, the sensor's maximum performance will be enabled, reducing latency and making the mouse track more precise, at the cost of more power.</div>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="competitive-mode">

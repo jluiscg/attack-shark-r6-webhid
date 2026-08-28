@@ -132,10 +132,15 @@ export class WebHIDManager {
   }
 
   private async syncState() {
-    await this.fetchFirmware();
-    await this.fetchBattery();
-    await this.fetchPerformance();
-    await this.fetchDPI();
+    this.store.update({ isLoading: true });
+    try {
+      await this.fetchFirmware();
+      await this.fetchBattery();
+      await this.fetchPerformance();
+      await this.fetchDPI();
+    } finally {
+      this.store.update({ isLoading: false });
+    }
   }
 
   private async fetchPerformance() {
