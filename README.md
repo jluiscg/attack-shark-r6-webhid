@@ -18,6 +18,24 @@ A driverless, cross-platform WebHID configurator for the Attack Shark R6 wireles
 - Node.js (v16+)
 - A WebHID-compatible browser (Google Chrome, Microsoft Edge, Opera, etc.)
 
+### Linux Requirements (udev rules)
+On Linux, browsers do not have permission to access HID devices by default. You must add a `udev` rule to grant your user account access to the R6 mouse.
+
+1. Create a new udev rules file:
+   ```bash
+   sudo nano /etc/udev/rules.d/99-r6-mouse.rules
+   ```
+2. Add the following lines (Vendor ID `373e`):
+   ```udev
+   SUBSYSTEM=="usb", ATTR{idVendor}=="373e", MODE="0666"
+   KERNEL=="hidraw*", ATTRS{idVendor}=="373e", MODE="0666"
+   ```
+3. Reload the rules and re-plug your mouse/dongle:
+   ```bash
+   sudo udevadm control --reload-rules
+   sudo udevadm trigger
+   ```
+
 ### Installation & Running
 1. Install the dependencies:
    ```bash
