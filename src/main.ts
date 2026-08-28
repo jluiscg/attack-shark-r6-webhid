@@ -88,7 +88,7 @@ manager.store.subscribe((state) => {
     
     if (pollingRateSel.value !== String(state.pollingRate)) pollingRateSel.value = String(state.pollingRate);
         if (state.sleepTime !== undefined) {
-      if (state.sleepTime === 0) {
+      if (state.sleepTime === 0 || state.sleepTime === 65535) {
         if (sleepEnable.checked) sleepEnable.checked = false;
         sleepSlider.disabled = true;
         sleepVal.style.opacity = '0.5';
@@ -165,7 +165,7 @@ sleepEnable.addEventListener('change', () => {
   const enabled = sleepEnable.checked;
   sleepSlider.disabled = !enabled;
   sleepVal.style.opacity = enabled ? '1' : '0.5';
-  const seconds = enabled ? sleepIndexToSeconds(parseInt(sleepSlider.value, 10)) : 0;
+  const seconds = enabled ? sleepIndexToSeconds(parseInt(sleepSlider.value, 10)) : 65535;
   q(Commands.setSleepTime(seconds));
   manager.store.update({ sleepTime: seconds });
 });
