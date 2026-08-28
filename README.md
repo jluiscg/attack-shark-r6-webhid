@@ -2,6 +2,8 @@
 
 > **Note:** I've vibecoded the s#1t out of this, so, yeah keep that in mind. Just wanted to be able to configure my mouse on Linux.
 
+![Screenshot of the Attack Shark R6 Configurator](assets/screenshot.png)
+
 A driverless, cross-platform WebHID configurator for the Attack Shark R6 wireless mouse. This project allows you to fully configure your mouse directly from your browser without needing the official Windows app or the official "webdriver" (which does not work on wireless for whatever reason).
 
 ## Features
