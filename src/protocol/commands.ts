@@ -5,7 +5,7 @@ export const Commands = {
   // --- READ COMMANDS (MSB Set) ---
   
   readActiveProfile: () => 
-    buildPacket(PARAM.PROFILE | 0x80, [0x00], 0x01, 0x00),
+    buildPacket(PARAM.PROFILE | 0x80, [0x00], 0x02, 0x00),
 
   readHandshake: () => 
     buildPacket(0x81, Array(16).fill(0), 0x02, 0x00),
@@ -49,7 +49,7 @@ export const Commands = {
   // --- WRITE COMMANDS (MSB Cleared) ---
 
   setActiveProfile: (profileId: number) => 
-    buildPacket(PARAM.PROFILE, [profileId], 0x01, 0x00),
+    buildPacket(PARAM.PROFILE, [profileId], 0x02, 0x00),
 
   setPollingRate: (code: number, p = 1) => 
     buildPacket(PARAM.POLLING_RATE, [p, code], 0x02, 0x01),
