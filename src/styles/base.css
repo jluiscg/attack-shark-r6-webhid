@@ -232,3 +232,7 @@ input:checked + .toggle-slider:before {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+select {
+  padding-right: 32px !important;
+}

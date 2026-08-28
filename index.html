@@ -51,7 +51,7 @@
             
             <div class="setting-group">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <label>Sleep Time</label>
+                <label>Sleep Time: <span id="sleep-val" style="color: var(--text-primary);">3 min</span></label>
                 <label class="toggle-switch">
                   <input type="checkbox" id="sleep-enable">
                   <span class="toggle-slider"></span>
@@ -59,15 +59,20 @@
               </div>
               <div class="setting-desc" style="margin-top: -4px; margin-bottom: 4px;">The mouse enters sleep mode after being idle for a certain period</div>
               <div id="sleep-slider-container" style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                <span style="font-size: 12px; color: var(--text-secondary); width: 30px; text-align: right;">15s</span>
                 <input type="range" id="sleep-slider" min="0" max="30" value="3" style="flex: 1; padding: 0;">
-                <span id="sleep-val" style="min-width: 50px; text-align: right; font-size: 0.9em; color: var(--text-secondary);">3 min</span>
+                <span style="font-size: 12px; color: var(--text-secondary); width: 40px;">30min</span>
               </div>
             </div>
 
             <div class="setting-group">
               <label>Debounce Time: <span id="debounce-val">3</span>ms</label>
               <div class="setting-desc">Increasing button debounce time appropriately can decrease the chance of double clicks</div>
-              <input type="range" id="debounce-slider" min="0" max="15" value="3" style="padding: 0;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                <span style="font-size: 12px; color: var(--text-secondary); width: 30px; text-align: right;">0ms</span>
+                <input type="range" id="debounce-slider" min="0" max="15" value="3" style="flex: 1; padding: 0;">
+                <span style="font-size: 12px; color: var(--text-secondary); width: 40px;">15ms</span>
+              </div>
             </div>
 
             <div class="setting-group">
