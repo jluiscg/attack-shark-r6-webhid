@@ -44,7 +44,7 @@ export class TransactionQueue {
       if (this.onPacketLog) this.onPacketLog('TX', cmd);
       
       // Send the command
-      await this.device.sendFeatureReport(0, cmd);
+      await this.device.sendFeatureReport(0, cmd as any);
       
       const recvPromise = new Promise<Uint8Array>((res) => {
         this.pendingResolve = res;

@@ -1,5 +1,4 @@
 import { WebHIDManager } from './driver/hid-manager';
-import { formatHex } from './protocol/packet';
 import { Commands } from './protocol/commands';
 
 const manager = new WebHIDManager();
