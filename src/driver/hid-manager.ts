@@ -135,6 +135,12 @@ export class WebHIDManager {
 
   public async changeProfile(profileId: number) {
     if (!this.device) return;
+    try {
+      // Send the hardware switch command
+      await this.safeWrite(Commands.setActiveProfile(profileId));
+    } catch(e) {
+      console.warn("Failed to set active hardware profile", e);
+    }
     this.store.update({ activeProfile: profileId });
     await this.syncState();
   }
@@ -143,12 +149,22 @@ export class WebHIDManager {
     this.store.update({ isLoading: true });
     try {
       await this.fetchFirmware();
+      await this.fetchActiveProfile();
       await this.fetchBattery();
       await this.fetchPerformance();
       await this.fetchDPI();
     } finally {
       this.store.update({ isLoading: false });
     }
+  }
+
+  private async fetchActiveProfile() {
+    await this.safeRead(Commands.readActiveProfile(), data => {
+      const p = data[7];
+      if (p >= 1 && p <= 3) {
+        this.store.update({ activeProfile: p });
+      }
+    });
   }
 
   private async fetchPerformance() {

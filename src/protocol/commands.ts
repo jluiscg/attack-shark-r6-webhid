@@ -4,6 +4,9 @@ import { buildPacket } from './packet';
 export const Commands = {
   // --- READ COMMANDS (MSB Set) ---
   
+  readActiveProfile: () => 
+    buildPacket(PARAM.PROFILE | 0x80, [0x01, 0x00], 0x02, 0x01),
+
   readHandshake: () => 
     buildPacket(0x81, Array(16).fill(0), 0x02, 0x00),
 
@@ -44,6 +47,9 @@ export const Commands = {
     buildPacket(PARAM.ACTIVE_DPI | 0x80, [p, 0x00], 0x02, 0x01),
 
   // --- WRITE COMMANDS (MSB Cleared) ---
+
+  setActiveProfile: (profileId: number) => 
+    buildPacket(PARAM.PROFILE, [0x01, profileId], 0x02, 0x01),
 
   setPollingRate: (code: number, p = 1) => 
     buildPacket(PARAM.POLLING_RATE, [p, code], 0x02, 0x01),
