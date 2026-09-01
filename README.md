@@ -1,5 +1,7 @@
 # Attack Shark R6 WebHID Configurator
 
+🌐 **[Try it Live Here](https://jluiscg.github.io/attack-shark-r6-webhid/)**
+
 > **Note:** I've vibecoded the s#1t out of this, so yeah, keep that in mind. Just wanted to be able to configure my mouse on Linux. (check udev prerequisites)
 
 ![Screenshot of the Attack Shark R6 Configurator](assets/screenshot.png)
